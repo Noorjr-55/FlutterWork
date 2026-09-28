@@ -1,0 +1,148 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const LogIn());
+}
+
+class LogIn extends StatelessWidget {
+  const LogIn({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        backgroundColor: Colors.white,
+        body: Center(
+          child: Padding(
+            padding: EdgeInsets.all(50),
+            child: Column(
+              mainAxisAlignment: .center,
+              crossAxisAlignment: .center,
+              children: [
+                Spacer(),
+                CircleAvatar(
+                  radius: 45,
+                  backgroundColor: const Color.fromARGB(255, 190, 221, 235),
+                  child: Icon(
+                    Icons.person,
+                    size: 70,
+                    color: const Color.fromARGB(255, 37, 102, 200),
+                  ),
+                ),
+                Text(
+                  "Welcome back",
+                  style: TextStyle(fontSize: 39, fontWeight: .bold),
+                ),
+                Text(
+                  "Sign in to continue",
+                  style: TextStyle(color: Colors.grey, fontSize: 18),
+                ),
+                SizedBox(height: 30),
+                Spacer(),
+
+                Row(
+                  mainAxisAlignment: .center,
+
+                  children: [
+                    Expanded(
+                      child: MaterialButton(
+                        height: 50,
+                        color: Colors.white,
+                        onPressed: () {},
+                        child: Row(
+                          children: [
+                            Icon(Icons.g_mobiledata_outlined),
+                            Text("Continue with Google"),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 20),
+                    Expanded(
+                      child: MaterialButton(
+                        height: 50,
+                        color: Colors.white,
+                        onPressed: () {},
+                        child: Row(
+                          children: [
+                            Icon(Icons.apple),
+                            Text("Continue with Apple"),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20),
+                Row(
+                  children: [
+                    Expanded(child: Divider()),
+                    Text("or", style: TextStyle(color: Colors.grey)),
+                    Expanded(child: Divider()),
+                  ],
+                ),
+
+                SizedBox(height: 20),
+                TextField(
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(
+                      Icons.mail_outline_rounded,
+                      color: Colors.grey,
+                    ),
+                    hintText: "Email address",
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 18),
+                TextField(
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.lock_outline, color: Colors.grey),
+                    border: OutlineInputBorder(),
+                    hintText: "Password",
+                  ),
+                ),
+                Spacer(),
+                MaterialButton(
+                  height: 60,
+                  minWidth: 400,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  color: Colors.blue,
+                  onPressed: () {},
+                  child: Text("Login", style: TextStyle(color: Colors.white)),
+                ),
+                Spacer(),
+                Row(
+                  mainAxisAlignment: .center,
+                  children: [
+                    Text(
+                      "Dont have an account?",
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                    TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        "Sign Up",
+                        style: TextStyle(color: Colors.blue),
+                      ),
+                    ),
+                  ],
+                ),
+
+                TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    "Forget Password?",
+                    style: TextStyle(color: Colors.blue),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
