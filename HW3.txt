@@ -114,7 +114,6 @@ class TodoPage extends StatelessWidget {
                       "My Todo",
                       style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                     ),
-                    // زر الانتقال لصفحة البروفايل
                     IconButton(
                       icon: const Icon(Icons.person, color: Colors.green),
                       onPressed: () {
@@ -129,7 +128,6 @@ class TodoPage extends StatelessWidget {
                 ),
             
 
-                // حقل الإدخال وزر الإضافة
                 Row(
                   children: [
                     Expanded(
@@ -160,7 +158,6 @@ class TodoPage extends StatelessWidget {
                   ],
                 ),
              
-                // عداد المهام
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
