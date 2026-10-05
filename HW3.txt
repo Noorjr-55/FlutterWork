@@ -1,0 +1,248 @@
+////HW3
+//logic.dart page
+import 'package:flutter/material.dart';
+
+class ToDoProvider extends ChangeNotifier {
+  List<String> todoList = [];
+  List<bool> todoCheck = [];
+
+  void TodoAdd(String task) {
+    if (task.isNotEmpty) {
+      todoList.add(task);
+      todoCheck.add(false);
+      notifyListeners();
+    }
+  }
+
+  void toggleCheck(int index) {
+    if (index >= 0 && index < todoCheck.length) {
+      todoCheck[index] = !todoCheck[index];
+      notifyListeners();
+    }
+  }
+
+  void TodoDel(int index) {
+    if (index >= 0 && index < todoList.length && index < todoCheck.length) {
+      todoList.removeAt(index);
+      notifyListeners();
+    }
+  }
+}
+//////////////////////////main.dart page 
+
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'logic.dart';
+import 'todo.dart';
+import 'profile.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (context) => ToDoProvider(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        initialRoute: "/",
+        routes: {
+          "/": (context) => const TodoPage(),
+          "/profiles": (context) => const ProfilePage(),
+        },
+      ),
+    );
+  }
+}
+/////////////profile.dart page
+
+import 'package:flutter/material.dart';
+
+class ProfilePage extends StatelessWidget {
+  const ProfilePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 240, 11, 87),
+      appBar: AppBar(title: const Text("Profile Page")),
+      body: Center(
+        child: MaterialButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          color: const Color.fromARGB(255, 208, 177, 187),
+          child: const Text("pop"),
+        ),
+      ),
+    );
+  }
+}
+///////////todo page 
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'logic.dart';
+
+
+class TodoPage extends StatelessWidget {
+  const TodoPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    TextEditingController todoCtr = TextEditingController();
+    var provider = context.watch<ToDoProvider>();
+
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(30),
+          child: SingleChildScrollView(
+            child: Column(
+              spacing: 30,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "My Todo",
+                      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                    ),
+                    // زر الانتقال لصفحة البروفايل
+                    IconButton(
+                      icon: const Icon(Icons.person, color: Colors.green),
+                      onPressed: () {
+                        Navigator.of(context).pushNamed("/profiles");
+                      },
+                    ),
+                  ],
+                ),
+                const Text(
+                  "Small steps, big progress",
+                  style: TextStyle(fontSize: 18, color: Colors.grey),
+                ),
+            
+
+                // حقل الإدخال وزر الإضافة
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: todoCtr,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          hintText: "Add a new todo",
+                          hintStyle: const TextStyle(color: Colors.grey),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    MaterialButton(
+                      minWidth: 50,
+                      onPressed: () {
+                        context.read<ToDoProvider>().TodoAdd(todoCtr.text);
+                        todoCtr.clear();
+                      },
+                      color: Colors.green,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Icon(Icons.add, color: Colors.white),
+                    ),
+                  ],
+                ),
+             
+                // عداد المهام
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Tasks",
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    Card(
+                      color: Colors.green[100],
+                      child: Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Text(
+                          "${provider.todoList.length} tasks",
+                          style: const TextStyle(color: Colors.green),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+               
+
+                
+                ...provider.todoList.asMap().entries.map((entry) {
+                  int index = entry.key;
+                  bool isChecked = provider.todoCheck[index];
+
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 10),
+                    height: 60,
+                    decoration: BoxDecoration(
+                      color: isChecked ? Colors.green.shade50 : Colors.green[100],
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Row(
+                        children: [
+                          Checkbox(
+                            value: isChecked,
+                            onChanged: (value) {
+                              context.read<ToDoProvider>().toggleCheck(index);
+                            },
+                          ),
+                          Text(
+                            provider.todoList[index],
+                            style: TextStyle(
+                              fontSize: 16,
+                              decoration: isChecked
+                                  ? TextDecoration.lineThrough
+                                  : TextDecoration.none,
+                              color: isChecked ? Colors.grey : Colors.black,
+                            ),
+                          ),
+                          const Spacer(),
+                          InkWell(
+                            onTap: () {
+                              context.read<ToDoProvider>().TodoDel(index);
+                            },
+                            child: Container(
+                              width: 45,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: Colors.red[100],
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: const Icon(
+                                Icons.delete_outline,
+                                color: Colors.red,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
